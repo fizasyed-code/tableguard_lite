@@ -160,3 +160,29 @@ Open `notebooks/00_Start_Here.ipynb` and choose the TableGuard kernel. It runs o
 After the commands above, share `artifacts/hardware_report.json` and `artifacts/unit_test_summary.json`, plus the approved scene/policy details when available. Do not buy or rent large GPUs before checking the required target and actual model workload.
 
 Source links and source-status boundaries: `docs/SOURCES.md`. Exact validation status: `docs/VALIDATION.md`.
+
+## Current project status
+
+This repository contains our TableGuard-Lite engineering prototype.
+
+### Demonstrated
+- Custom MuJoCo environment with two simulated SO-101 arms.
+- Camera rendering and observation/action recording.
+- Right-arm cup grasp, lift, transfer, placement, and release.
+- Left-arm fork approach and grasp in a development trial.
+
+### Still in progress
+- Complete fork lift, transfer, and placement.
+- Complete coordinated two-object sequence.
+- SmolVLA task-specific training and learned-policy execution.
+- Intel/OpenVINO policy deployment and optimization measurements.
+- Camera-based goal verification and preservation-aware repair.
+- Robustness evaluation and final submission materials.
+
+The current robot demonstrations use scripted engineering controllers.
+They are not trained-policy results.
+
+### Reproduction
+This initial upload contains source code and notebooks.
+The required scene assets and selected recordings must also be provided.
+Machine-specific paths need adjustment before running on another computer.
