@@ -1,0 +1,15 @@
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.env
+.cache/
+data/public/*
+data/eval_private/*
+results/*
+logs/*
+!data/public/.gitkeep
+!data/eval_private/.gitkeep
+!results/.gitkeep
+!logs/.gitkeep
