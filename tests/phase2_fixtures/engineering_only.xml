@@ -1,0 +1,25 @@
+<!-- ONLY for optional engine API tests. NOT SO-101, NOT the official task. -->
+<mujoco model="synthetic_engineering_test_not_robots">
+  <option timestep="0.002" gravity="0 0 0"/>
+  <worldbody>
+    <light pos="0 0 3"/>
+    <camera name="top" pos="0 0 2"/>
+    <geom type="plane" size="1 1 0.01"/>
+    <body name="left_base" pos="-0.2 0 0.2">
+      <joint name="left_joint" type="hinge" axis="0 1 0"/>
+      <geom type="capsule" size="0.02 0.1" mass="1"/>
+    </body>
+    <body name="right_base" pos="0.2 0 0.2">
+      <joint name="right_joint" type="slide" axis="0 1 0"/>
+      <geom type="box" size="0.04 0.04 0.04" mass="1"/>
+    </body>
+    <body name="object" pos="0 0 0.1">
+      <freejoint name="object_free"/>
+      <geom type="sphere" size="0.03" mass="0.05"/>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="left_motor" joint="left_joint" ctrllimited="true" ctrlrange="-1 1"/>
+    <motor name="right_motor" joint="right_joint" ctrllimited="true" ctrlrange="-2 2"/>
+  </actuator>
+</mujoco>

@@ -1,0 +1,14 @@
+{
+  "status": "UNCONFIGURED_NOT_OFFICIAL_ASSETS",
+  "scene_path": null,
+  "policy_id": null,
+  "policy_revision": null,
+  "action_dimensions": null,
+  "action_units": null,
+  "camera_names": [],
+  "supported_action_boundary": null,
+  "approved_repair_types": [],
+  "exact_processor": null,
+  "official_online_cutoff": null,
+  "internal_submission_target": "2026-09-15T18:00:00+09:00"
+}
