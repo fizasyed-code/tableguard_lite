@@ -1,0 +1,6 @@
+# Only use in your existing compatible environment after checking the official stack.
+# These are compatibility ranges, NOT an organizer-prescribed environment lock.
+# Do not independently upgrade an already working policy stack.
+mujoco>=3.2,<4
+numpy>=1.26,<3
+Pillow>=10,<13
