@@ -1,162 +1,309 @@
-# TableGuard-Lite — Phase 1 starter
+# TableGuard-Lite
 
-**Prepared 12 September 2026. Python-first; CPU-only preparation.**
+## Safe Closed-Loop Bimanual VLA Control for Robotic Table Setting
 
-This pack starts implementation of the agreed TableGuard-Lite project. It is not the full hackathon robot application. The official scene, compatible policy, visual monitor, joint action adapter, eligible Intel machine, and final track permissions still need to be connected and verified.
+TableGuard-Lite is a safety-aware closed-loop Vision-Language-Action (VLA) system for bimanual robotic table setting. It combines natural-language instructions, three RGB camera views, a 12-joint robot state, SmolVLA action prediction, runtime safety supervision, recovery-oriented learning, a learned residual action adapter, and OpenVINO deployment.
 
-## What actually works in this pack
+The project focuses on a practical Physical AI question:
 
-- Local CPU / RAM / GPU discovery report. It does not upload information or download model weights.
-- 49 offline unit tests for a bounded task supervisor, validation, and dataset handling. Network calls are mocked in downloader tests.
-- A hand-authored goal-state demonstration that requests continue / repair / hold / stop and identifies affected and protected goals.
-- Public-dataset metadata inspection and a bounded downloader for one LeRobot v2 episode plus one camera, with revision and SHA-256 provenance.
-- Video-frame and recorded-action visualization after a real download.
-- A notebook that keeps setup, tests, data inspection, and saved artifacts in this one project folder.
+> How can a language-conditioned bimanual robot execute learned actions while detecting, containing, and learning from unsafe closed-loop behavior?
 
-**No VLA model is loaded. No simulated or physical robot is controlled. No public dataset, checkpoint or robot performance result is bundled.** Live download and visualization against public data were not executable in the preparation environment because external network access from Python was unavailable. See `docs/VALIDATION.md` for the exact tests run.
+---
 
-## Start immediately — no GPU and no pip install needed for these steps
+## Task
 
-Extract the ZIP. Open a terminal **inside `TableGuard_Starter`** (the folder containing this README and the `tableguard` package).
+The robot receives the instruction:
 
-```bash
-python -m tableguard hardware
-python -m tableguard selftest
-python -m tableguard demo
+> **First place the cup to the right of the plate. Then place the fork to the left of the plate. Keep the plate centered.**
+
+The target scene requires:
+
+- cup moved approximately **+25 mm to the right**;
+- fork moved approximately **−25 mm to the left**;
+- plate preserved near its original position;
+- safe dual-arm execution without unexpected robot/environment contact.
+
+---
+
+## System
+
+### Inputs
+- Top RGB camera
+- Left wrist RGB camera
+- Right wrist RGB camera
+- 12-joint robot state
+- Natural-language instruction
+
+### Policy
+- **SmolVLA / LeRobot**
+- 12-dimensional bimanual action
+- 20-step predicted action chunk
+- First 10 learned steps executed before fresh replanning
+- 50 ms simulated execution horizon before replanning
+
+### Safety supervisor
+Runtime checks include:
+
+- joint-rate limit;
+- unexpected robot/environment contacts;
+- collision monitoring;
+- scene/object preservation checks.
+
+The safety constraints are not disabled during learned evaluation.
+
+### Recovery-oriented learning
+Failure states from learned closed-loop rollouts are reused for targeted fine-tuning. The final recovery stage also trains a learned residual action adapter using successful expert sequences and real closed-loop failure states.
+
+---
+
+## Verified Results
+
+| Capability | Status |
+|---|---|
+| Dual SO-101 MuJoCo environment | ✅ Verified |
+| Three-camera perception | ✅ Verified |
+| Natural-language + 12-joint SmolVLA pipeline | ✅ Verified |
+| Closed-loop replanning | ✅ Verified |
+| Runtime safety supervisor | ✅ Verified |
+| Full scripted/expert reference task | ✅ PASS |
+| Recovery-oriented fine-tuning | ✅ Verified |
+| Learned residual action adapter | ✅ Verified |
+| OpenVINO model export / numerical parity | ✅ PASS |
+| Intel CPU inference | ✅ Verified |
+| Full end-to-end learned bimanual completion | ⚠️ Not yet achieved |
+
+### Closed-loop robustness
+
+Targeted recovery training progressively extended safe learned execution before the runtime guard intervened:
+
+| Learned evaluation | Safe simulated execution before guard |
+|---|---:|
+| Initial full-task rollout | **7.77 s** |
+| Anti-regression repair | **11.77 s** |
+| Actual-state recovery | **14.32 s** |
+| Learned residual action adapter | **15.07 s** |
+
+This is an improvement of approximately **94%** from the first to the final learned evaluation while preserving the safety constraints.
+
+### Learned residual action adapter
+
+The final adapter was trained using:
+
+- **556** full-task expert/reference sequences;
+- **48** actual closed-loop recovery sequences from the learned policy;
+- **12,080** step-level adapter training examples.
+
+Normalized residual RMSE:
+
+- before learned adapter: **0.5449**
+- after learned adapter: **0.2529**
+- reduction: **53.6%**
+
+The adapter uses only the current 12-joint state and current SmolVLA action chunk at execution time. It does not use object coordinates, phase labels, IK, expert playback, or waypoint substitution.
+
+### Final learned evaluation
+
+The final learned rollout:
+
+- used the 7701-update SmolVLA checkpoint plus the learned residual action adapter;
+- received three RGB camera views, 12-joint state, and the language instruction;
+- completed **302 policy calls**;
+- ran for approximately **15.07 s simulated time** before the safety supervisor stopped an unexpected `development_table / right_camera_box2` contact;
+- therefore has `task_success = False`.
+
+This rollout is evidence of closed-loop learned control and active safety supervision, not full learned task completion.
+
+---
+## Quantitative Results
+
+Recovery-oriented training progressively improved safe closed-loop execution
+while keeping the original safety constraints active.
+
+<p align="center">
+  <img src="results/safe_execution_progress.png"
+       alt="Safe closed-loop execution progress"
+       width="850"/>
+</p>
+
+### Closed-Loop Safety Progress
+
+| Evaluation Stage | Safe Execution Before Guard |
+|---|---:|
+| Initial full-task rollout | **7.77 s** |
+| Anti-regression repair | **11.77 s** |
+| Actual-state recovery | **14.32 s** |
+| Learned residual action adapter | **15.07 s** |
+
+**Overall improvement:** approximately **94%** from the initial learned rollout to the final learned evaluation.
+
+### Learned Action Adapter
+
+- Expert/reference sequences: **556**
+- Actual closed-loop recovery sequences: **48**
+- Step-level training examples: **12,080**
+- Residual RMSE before adapter: **0.5449**
+- Residual RMSE after adapter: **0.2529**
+- RMSE reduction: **53.6%**
+- Final learned rollout policy calls: **302**
+
+> The final full learned bimanual task was not completed successfully; the safety supervisor stopped execution after detecting unexpected contact.
+> 
+## Reference Task
+
+A complete expert/scripted reference sequence successfully performs:
+
+1. cup grasp;
+2. cup lift;
+3. cup transfer approximately +25 mm right;
+4. cup placement and release;
+5. fork grasp;
+6. table-supported fork slide approximately −25 mm left;
+7. fork release;
+8. plate preservation.
+
+The reference trajectory is engineering/training evidence and is **not labeled as learned VLA success**.
+
+---
+
+## OpenVINO / Intel Deployment
+
+The project includes verified OpenVINO export and numerical-parity checks.
+
+The final 59X2 deployment path successfully verified:
+
+- OpenVINO conversion;
+- CPU inference;
+- numerical parity;
+- standalone IR loading.
+
+For transparency, the final 59X2 OpenVINO checkpoint did **not** improve CPU latency over its PyTorch baseline. A separate earlier verified checkpoint showed approximately **1.39×** median CPU speedup. These results are kept distinct.
+
+---
+## System Architecture
+
+<p align="center">
+  <img src="docs/architecture.png" alt="TableGuard-Lite System Architecture" width="900"/>
+</p>
+
+TableGuard-Lite combines natural-language instructions, three RGB camera views,
+a 12-joint robot state, SmolVLA action prediction, a learned action adapter,
+runtime safety supervision, and closed-loop replanning for dual SO-101
+manipulation in MuJoCo.
+
+## Architecture
+
+```text
+Natural-Language Instruction
+          +
+3 RGB Cameras + 12-Joint State
+          ↓
+       SmolVLA
+          ↓
+ Short-Horizon Action Chunk
+          ↓
+ Learned Action Adapter
+          ↓
+   Safety Supervisor
+          ↓
+Dual SO-101 Robot Execution
+          ↓
+ New Visual Observation
+          ↺
+   Closed-Loop Replanning
+```
+# TableGuard-Lite
+
+### Safe Closed-Loop Bimanual VLA Control for Robotic Table Setting
+
+<p align="center">
+  <img src="assets/cover-image.png" alt="TableGuard-Lite" width="1000"/>
+</p>
+
+**TableGuard-Lite** is a safety-aware closed-loop Vision-Language-Action system
+for bimanual robotic table setting using SmolVLA, three-camera perception,
+dual SO-101 manipulation in MuJoCo, recovery-oriented learning, runtime safety
+supervision, and OpenVINO deployment.
+---
+
+## Repository Structure
+
+```text
+tableguard/
+    Core environment, control, safety, and VLA integration
+
+scripts/
+    Training, evaluation, rollout, and deployment utilities
+
+configs/
+    Reproducible experiment configuration
+
+tests/
+    Project tests
+
+integrations/
+    VLA / OpenVINO integration helpers
+
+artifacts/
+    Keep only small representative evidence in the public repository
+
+results/
+    Compact result summaries and figures
+
+docs/
+    Architecture, demo, and submission documentation
 ```
 
-Use `python3` instead of `python` where appropriate. Target Python 3.11 for the next integration stage; the supplied pure-Python starter was also tested under Python 3.13 in its preparation environment.
+Large model checkpoints, caches, raw frame dumps, temporary training runs, and private machine-specific data should not be committed to the public repository.
 
-Outputs:
+---
 
-- `artifacts/hardware_report.json` — your local machine, after YOU run the hardware command.
-- `artifacts/unit_test_summary.json` — software test counts, not robot-task success.
-- `artifacts/logic_fixture_results.json` — synthetic structured fixture decisions; no actual repair is performed.
+## Limitations
 
-`artifacts/build_environment_not_user_machine.json` records the preparation runtime only. Do not submit it as your target hardware evidence.
+- Full learned end-to-end cup-and-fork completion has not yet been achieved.
+- Long-horizon bimanual behavior still exhibits action drift and accumulated prediction error.
+- Current validation is in MuJoCo simulation.
+- The learned safety/recovery pipeline currently stops unsafe contact rather than guaranteeing proactive task recovery.
+- Further inference optimization is needed for lower-latency deployment.
 
-## Create an isolated Phase 1 environment
+---
 
-Do not change a working organizer robotics environment just to inspect a dataset. This preparation environment installs neither PyTorch nor LeRobot, MuJoCo, OpenVINO, nor GPU drivers.
+## Future Work
 
-### Windows PowerShell
+- achieve robust full learned bimanual completion from reset;
+- expand recovery datasets with more diverse failure states;
+- add temporal/history-aware VLA control;
+- move from stop-based safety to proactive learned recovery;
+- transfer the system to physical dual SO-101 hardware;
+- optimize VLA inference for lower-latency Intel edge deployment;
+- generalize from table setting to broader multi-object household manipulation.
 
-```powershell
-py -3.11 -m venv .venv
-# Activation is not necessary; avoids PowerShell execution-policy changes.
-.\.venv\Scripts\python.exe -m pip install --upgrade pip
-.\.venv\Scripts\python.exe -m pip install -r requirements-phase1.txt
-.\.venv\Scripts\python.exe -m tableguard hardware
-```
+---
 
-### Ubuntu / Linux
+## Team
 
-With Python 3.11 and its venv support already installed:
+TableGuard-Lite was developed collaboratively, with responsibilities divided between technical implementation and project presentation/validation.
 
-```bash
-python3.11 -m venv .venv
-.venv/bin/python -m pip install --upgrade pip
-.venv/bin/python -m pip install -r requirements-phase1.txt
-.venv/bin/python -m tableguard hardware
-```
+### Technical Development
+- Designed and implemented the complete TableGuard-Lite codebase
+- Built the dual SO-101 MuJoCo simulation environment
+- Integrated 3-camera perception and 12-joint robot state
+- Implemented SmolVLA-based closed-loop bimanual control
+- Developed the runtime safety supervisor
+- Implemented recovery-oriented training and the learned action adapter
+- Performed OpenVINO export and Intel CPU deployment integration
+- Conducted training, rollout, debugging, and quantitative evaluation
 
-If Python 3.11 is not available, establish it through your existing Python/conda tooling; do not modify system Python blindly. For final Intel execution, the linked official installer documents a Python 3.11 `intel_dev_env` on Ubuntu 24.04. Follow that separate approved setup and test the actual policy.
+### Presentation & Verification
+- Prepared the hackathon presentation and pitch materials
+- Organized project results and visual evidence
+- Reviewed and verified reported results
+- Prepared submission media and presentation content
+- Supported final project validation and documentation
 
-In commands below, `python` means the interpreter from your selected environment. On Windows use `.\.venv\Scripts\python.exe`; on Linux use `.venv/bin/python` unless the environment is activated.
+Our team combined implementation, verification, and presentation efforts to deliver TableGuard-Lite as a safety-aware Physical AI system for bimanual robotic manipulation.
 
-## Inspect public data — metadata first
+## Project Message
 
-```bash
-python -m tableguard catalog
-python -m tableguard fetch --repo lerobot/svla_so101_pickplace
-```
+> **TableGuard-Lite is designed not to hide VLA failures, but to detect, contain, and learn from them — providing a practical foundation for safer, recoverable, and verifiable Physical AI.**
 
-Read the saved `download_manifest.json` and `meta/info.json` before requesting video. The default is a small reference, not the final robotics task. Its name contains SO-101 but publisher metadata says `so100_follower`.
 
-Now request **one** episode, **one** camera, and at most 50 MB including downloaded metadata:
-
-```bash
-python -m tableguard fetch --repo lerobot/svla_so101_pickplace --episode 0 --media --max-mb 50
-python -m tableguard visualize
-```
-
-The camera defaults to the first sorted video key in the actual metadata. Set `--camera <exact_camera_key>` to select another. A failed download returns a nonzero exit status and an incomplete manifest; it is not silently replaced with a generated video.
-
-A metadata-only command for the larger simulation reference:
-
-```bash
-python -m tableguard fetch --repo gpudad/so101_pick_cube
-```
-
-**LeRobot v3 media sampling is intentionally not implemented in this starter.** V3 may put multiple episodes in shared files. The program refuses to guess shard or timestamp offsets. Use the official format-specific loader after pinning a compatible version. The dataset card's older training/import examples are not an approved runtime recipe.
-
-## Public reference selection
-
-| Repository | Publisher-reported data | Use and limitation |
-|---|---|---|
-| `lerobot/svla_so101_pickplace` | 50 episodes; 11,939 frames; 6-value actions; v2.1; `so100_follower` metadata | Start with a small loading/video inspection example. Single arm, not the final task. |
-| `gpudad/so101_pick_cube` | 10,993 episodes; 1,456,901 frames; three camera views; SO-101 MuJoCo cube-to-bin; v3.0 | Optional simulator-domain reference. Still single arm. |
-| `lerobot/aloha_sim_transfer_cube_human` | 50 episodes; 20,000 frames; 14-value actions; ALOHA; v2.0 | Optional bimanual format example. Different embodiment and task. |
-
-These public datasets do not supply a tested dual-SO-101 table-setting policy, approved recovery actions, or TableGuard failure labels. Do not merge their raw action vectors or assume downloading more examples creates policy compatibility. Review the data cards and licenses; preserve third-party terms.
-
-## Our actual TableGuard evaluation data
-
-Use the approved challenge scene to record **development data** and **held-out episodes**. Proposed starting design: 8 development configurations; 12 held-out configurations from normal, benign-change, local-violation, and unknown-evidence families. Run 3 compared methods on each of the 12 held-out configurations: 36 attempted episodes.
-
-Those are planning targets, not existing data or a policy-training sample size. Keep official evaluation separate from custom robustness tests. Split by episode/initial configuration, never random adjacent frames. Runtime gets only allowed observations. Evaluator labels, disturbance IDs and privileged simulator object states stay outside the controller and prompts.
-
-## Hardware plan — engineering budgets, not measured requirements
-
-- This starter: no discrete GPU; a 16 GB RAM development computer is a comfortable planning target for small-sample inspection. Pure-Python tests need far less, but this is not a benchmark minimum.
-- Compact frozen-policy experiments, if approved and compatible: a single 8–12 GB VRAM GPU is a tentative starting budget, with 16 GB offering more headroom. Actual peak allocation and latency must be measured at the real image sizes, camera count and action chunk settings.
-- Optional fine-tuning: a 16–24 GB VRAM starting budget may be useful for a compact model with reduced batch size/appropriate fine-tuning method; it is not a guaranteed fit. Dataset collection and controller compatibility can still dominate. Training is not in the deadline-critical scope.
-- Final execution: the supplied challenge says Intel Core Ultra Series 2/3. Targeting 32 GB system RAM is our planning recommendation, not an official minimum. CPU, iGPU and NPU support depends on the actual model, backend, drivers and rules. Shared graphics memory is not dedicated NVIDIA VRAM.
-
-The SmolVLA guide describes a 450M-parameter base model. At two bytes per parameter, weights alone are approximately 0.9 GB decimal; runtime needs additional memory for activations, buffers, caches, other components, and possibly precision/conversion copies. This calculation is NOT a full memory estimate. A generic base model is not automatically compatible with the required task.
-
-## Supervisor integration contract
-
-`tableguard/supervisor.py` accepts explicitly supplied goal observations and returns a decision. It does not infer goals from images. The real visual checker is M3's next integration task.
-
-- Pending placements are not failures.
-- Completed or due goals require fresh evidence.
-- A runtime-observed change to a dependency invalidates older evidence, but does not automatically mark the goal violated.
-- Unknown/stale evidence produces a hold request.
-- Exactly one supported violated goal can produce a bounded repair request.
-- Multiple/unsupported violations and exhausted budgets stop explicitly.
-- The worker increments attempts on actual dispatch; polling the supervisor does not consume attempts.
-- `CONTINUE` is not a statement that the entire task is complete.
-- `HOLD` and `STOP` are requests. A real adapter must implement the controller's supported boundary/stop mechanism; the supplied stub deliberately raises rather than pretending to move or stop a robot.
-
-To close this loop, M2 must connect a task-compatible policy and valid joint action interface. Never delete one arm's command from a jointly generated chunk or teleport an object to fake recovery.
-
-## Notebook route
-
-Install notebook tools in the chosen preparation environment:
-
-```bash
-python -m pip install -r requirements-notebook.txt
-python -m ipykernel install --user --name tableguard-phase1 --display-name "Python (TableGuard Phase 1)"
-python -m jupyter lab
-```
-
-Open `notebooks/00_Start_Here.ipynb` and choose the TableGuard kernel. It runs offline hardware and logic checks first. The public download cell is disabled by default; set `DOWNLOAD_PUBLIC_SAMPLE = True` when ready. The notebook saves visualizations after a genuine successful download. It never labels fixture outputs as robot results.
-
-## Immediate five-person assignments (12–15 September, KST)
-
-| Owner | First concrete task | Required evidence |
-|---|---|---|
-| M1 — you | Run tests; approve one-repair scope; confirm full brief and exact cutoff | Hardware report, requirement decision log, task/repair acceptance criteria |
-| M2 — robotics | Obtain approved scene/policy and connect baseline on eligible hardware | Real instruction-to-action run; action dimensions/units, cameras and boundary contract |
-| M3 — vision/data | Fetch one reference episode; inspect camera/action schemas; define checker on actual scene | Saved frames, data manifest and supported goal definitions |
-| M4 — Intel | Verify exact CPU and permitted machine access; run official stack verifier separately | Exact target configuration and actual model/device execution, not only device discovery |
-| M5 — evaluation/demo | Maintain independent test manifest and logs; review outputs | Repeatable checks, media plan and submission checklist |
-
-12 Sep: baseline and hardware decision. 13 Sep: one real supported repair with fresh verification. 14 Sep: matched evaluation and feature freeze by 18:00 KST. 15 Sep: clean-run test and internal submission target 18:00 KST. These are team targets, not a newly verified online cutoff. Any earlier official deadline takes precedence.
-
-## Progress gate
-
-After the commands above, share `artifacts/hardware_report.json` and `artifacts/unit_test_summary.json`, plus the approved scene/policy details when available. Do not buy or rent large GPUs before checking the required target and actual model workload.
-
-Source links and source-status boundaries: `docs/SOURCES.md`. Exact validation status: `docs/VALIDATION.md`.
