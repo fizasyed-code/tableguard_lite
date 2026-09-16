@@ -22,7 +22,7 @@
 | Plate preservation | ✅ Passed in reference task | Plate remains centered/preserved |
 | SmolVLA training/inference infrastructure | ✅ Complete | Training, save/reload, CUDA inference, delta actions |
 | Learned 59X2 local specialist | ✅ Locally validated | Three-camera collision-recovery / local approach specialist |
-| Full learned bimanual task | ⚠️ Not yet verified | Do **not** claim complete learned cup+fork success |
+| Full learned bimanual task | ⚠️ Not yet verified |
 | Intel/OpenVINO deployment proof | ✅ Verified | Earlier checkpoint showed speedup; final 59X2 also exported and ran successfully |
 | Final 59X2 OpenVINO export | ✅ Passed | Full export, CPU parity, benchmark, and standalone IR execution completed |
 
