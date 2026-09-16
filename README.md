@@ -281,26 +281,35 @@ Large model checkpoints, caches, raw frame dumps, temporary training runs, and p
 
 ## Team
 
-TableGuard-Lite was developed collaboratively, with responsibilities divided between technical implementation and project presentation/validation.
+### Syeda Fiza Rubab — Team Leader
+**Role:** Project Idea, System Design, and Core Development
 
-### Technical Development
-- Designed and implemented the complete TableGuard-Lite codebase
-- Built the dual SO-101 MuJoCo simulation environment
-- Integrated 3-camera perception and 12-joint robot state
-- Implemented SmolVLA-based closed-loop bimanual control
-- Developed the runtime safety supervisor
-- Implemented recovery-oriented training and the learned action adapter
-- Performed OpenVINO export and Intel CPU deployment integration
-- Conducted training, rollout, debugging, and quantitative evaluation
+- Proposed the TableGuard-Lite project concept
+- Led the overall technical direction and system architecture
+- Implemented the main project code and experimentation pipeline
+- Developed the bimanual MuJoCo environment, SmolVLA control, safety supervision, recovery learning, and deployment workflow
+- Coordinated the final hackathon project development
 
-### Presentation & Verification
-- Prepared the hackathon presentation and pitch materials
-- Organized project results and visual evidence
-- Reviewed and verified reported results
-- Prepared submission media and presentation content
-- Supported final project validation and documentation
+### Rana Zain
+**Role:** Verification, Code Support, GitHub, and Presentation
 
-Our team combined implementation, verification, and presentation efforts to deliver TableGuard-Lite as a safety-aware Physical AI system for bimanual robotic manipulation.
+- Supported code verification and implementation checks
+- Reviewed project outputs and experimental results
+- Managed GitHub repository updates and project organization
+- Contributed to presentation preparation
+- Supported final technical validation
+
+### Saira Asghar
+**Role:** Presentation and Submission
+
+- Prepared and refined presentation materials
+- Supported visual organization of project results
+- Assisted with hackathon submission content
+- Managed final submission preparation and media organization
+
+---
+
+Our team combined technical development, verification, presentation, and submission work to deliver **TableGuard-Lite** as a safety-aware closed-loop bimanual VLA system for Physical AI.
 
 ## Project Message
 
