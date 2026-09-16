@@ -282,7 +282,7 @@ Large model checkpoints, caches, raw frame dumps, temporary training runs, and p
 ## Team
 
 ### Syeda Fiza Rubab — Team Leader
-**Role:** Project Idea, System Design, and Core Development
+**Role:** Project Idea, System Design, and Core Development, Presentation, Demo
 
 - Proposed the TableGuard-Lite project concept
 - Led the overall technical direction and system architecture
@@ -304,6 +304,7 @@ Large model checkpoints, caches, raw frame dumps, temporary training runs, and p
 
 - Prepared and refined presentation materials
 - Supported visual organization of project results
+- Reviewed project outputs and experimental results
 
 ---
 
