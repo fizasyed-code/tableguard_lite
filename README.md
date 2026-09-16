@@ -120,7 +120,7 @@ Recovery-oriented training progressively improved safe closed-loop execution
 while keeping the original safety constraints active.
 
 <p align="center">
-  <img src="essets/safe_execution_progress.png"
+  <img src="assets/safe_execution_progress.png"
        alt="Safe closed-loop execution progress"
        width="850"/>
 </p>
