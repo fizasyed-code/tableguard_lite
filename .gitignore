@@ -1,15 +1,77 @@
-.venv/
+# Python
 __pycache__/
-*.pyc
+*.py[cod]
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
 .ipynb_checkpoints/
+*.egg-info/
+build/
+dist/
+
+# Environments
+.venv/
+venv/
+env/
 .env
+.env.*
+!.env.example
+
+# IDE / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Logs / temporary files
+*.log
+logs/
+tmp/
+temp/
+*.tmp
+
+# Model/cache directories
+models/hf_cache/
+**/hf_cache/
 .cache/
-data/public/*
-data/eval_private/*
-results/*
-logs/*
-!data/public/.gitkeep
-!data/eval_private/.gitkeep
-!results/.gitkeep
-!logs/.gitkeep
+huggingface/
+wandb/
+runs/
+
+# Large ML artifacts / checkpoints
+**/checkpoint*/
+**/checkpoints/
+*.safetensors
+*.bin
+*.pt
+*.pth
+*.onnx
+*.engine
+
+# Raw rollout / training artifacts
+artifacts/**/observations/
+artifacts/**/frames/
+artifacts/**/images/
+artifacts/**/worker.log
+artifacts/**/policy_execution.jsonl
+artifacts/**/rollout_trace*
+artifacts/**/checkpoint_final/
+artifacts/**/checkpoint*/
+artifacts/**/model*
+artifacts/**/optimizer*
+
+# Large/raw datasets
+data/raw/
+data/cache/
+*.npy
+*.npz
+
+# Videos: keep only intentionally curated small demo files
+*.mp4
+!docs/demo/*.mp4
+!assets/*.mp4
+
+# Local/private paths and scratch files
+*_local.*
+private/
+secrets/
