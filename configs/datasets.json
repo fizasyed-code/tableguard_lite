@@ -1,0 +1,43 @@
+{
+  "checked_date": "2026-09-12",
+  "counts_source": "Publisher dataset cards; not independently audited episode quality",
+  "datasets": [
+    {
+      "repo_id": "lerobot/svla_so101_pickplace",
+      "url": "https://huggingface.co/datasets/lerobot/svla_so101_pickplace",
+      "use": "START HERE: small public loading/video inspection reference, not final task data",
+      "reported_episodes": 50,
+      "reported_frames": 11939,
+      "reported_robot_type": "so100_follower",
+      "reported_action_dim": 6,
+      "reported_format": "v2.1",
+      "reported_license": "apache-2.0",
+      "warning": "Repository name says so101, but published metadata says so100_follower. Not bimanual table setting."
+    },
+    {
+      "repo_id": "gpudad/so101_pick_cube",
+      "url": "https://huggingface.co/datasets/gpudad/so101_pick_cube",
+      "use": "Optional SO-101 MuJoCo simulation reference; metadata first",
+      "reported_episodes": 10993,
+      "reported_frames": 1456901,
+      "reported_robot_type": "SO-101 (publisher description)",
+      "reported_action_dim": 6,
+      "reported_format": "v3.0",
+      "reported_license": "apache-2.0",
+      "warning": "Single-arm cube-to-bin task. Do not copy legacy import/training commands blindly from the card."
+    },
+    {
+      "repo_id": "lerobot/aloha_sim_transfer_cube_human",
+      "url": "https://huggingface.co/datasets/lerobot/aloha_sim_transfer_cube_human",
+      "use": "Optional bimanual sequence-format reference only",
+      "reported_episodes": 50,
+      "reported_frames": 20000,
+      "reported_robot_type": "aloha",
+      "reported_action_dim": 14,
+      "reported_format": "v2.0",
+      "reported_license": "mit",
+      "warning": "Different embodiment and task. A 14-value ALOHA action is not an approved dual-SO-101 action."
+    }
+  ],
+  "final_evaluation_data": "Collect permitted observations from the approved challenge scene; these public datasets do not supply TableGuard repair labels."
+}

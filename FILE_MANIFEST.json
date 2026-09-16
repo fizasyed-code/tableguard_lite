@@ -1,0 +1,175 @@
+{
+  "project": "TableGuard-Lite Phase 1",
+  "files": [
+    {
+      "path": ".gitignore",
+      "bytes": 208,
+      "sha256": "09e22cb243b3dd9f9339252b77130ec8d88be4262656183241ae88893e8a0548"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1248,
+      "sha256": "dbdf05cb8aedee79bd46b143d62f6d96dc531ba9c2c212089365178e2d44562b"
+    },
+    {
+      "path": "README.md",
+      "bytes": 11846,
+      "sha256": "e291fbacb0909626bfdc54a9888703bfab216ff911fb94a70289c084919ce42a"
+    },
+    {
+      "path": "artifacts/build_environment_not_user_machine.json",
+      "bytes": 958,
+      "sha256": "69abdf2ff0eacf2af5307e0b334ba256750169f7285a3708675dc46330915055"
+    },
+    {
+      "path": "artifacts/build_environment_packages.txt",
+      "bytes": 10143,
+      "sha256": "5fcb9bd7202040ae5239e0f9439d586c44db9082e45c5b9921f1715361c33b80"
+    },
+    {
+      "path": "artifacts/logic_demo_output.txt",
+      "bytes": 1969,
+      "sha256": "a077d73d82de11358b755135edaf412956ef5dd2a1086c2b72af6a4004180fb3"
+    },
+    {
+      "path": "artifacts/logic_fixture_results.json",
+      "bytes": 1969,
+      "sha256": "a077d73d82de11358b755135edaf412956ef5dd2a1086c2b72af6a4004180fb3"
+    },
+    {
+      "path": "artifacts/unit_test_output.txt",
+      "bytes": 5066,
+      "sha256": "5705095aa690e4602fee08a45521fdbaecf69c0f4a6f41cd6acbd1435b83d141"
+    },
+    {
+      "path": "artifacts/unit_test_summary.json",
+      "bytes": 141,
+      "sha256": "05fff29f493b07202eacbad05ec4d5717a223dafdc1fc921b0b6b840f4cbdbef"
+    },
+    {
+      "path": "configs/approved_task.example.json",
+      "bytes": 386,
+      "sha256": "aa793433f5ff4c6c66c562e2a560f545b0c0f71aa5185640381ec282e0daa99e"
+    },
+    {
+      "path": "configs/datasets.json",
+      "bytes": 1961,
+      "sha256": "36ec3ad835e97b9d15343a0e90344919fac2a7abe34986305812f6f040c5c2be"
+    },
+    {
+      "path": "data/dev/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/eval_private/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/public/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/NEXT_STEPS.md",
+      "bytes": 1105,
+      "sha256": "d9cf4b91a87022f478c7e16e704dc0b4f8609bfe37acced8354c37a809af6b29"
+    },
+    {
+      "path": "docs/SOURCES.md",
+      "bytes": 2331,
+      "sha256": "a2b1a573a8cbb0a0cfa95c6e7401c30165601126becb2329c728699e246b0986"
+    },
+    {
+      "path": "docs/VALIDATION.md",
+      "bytes": 1904,
+      "sha256": "bf3729e80410128be3c04c7a5ad29040952c0cd64ce95613385d4c655d618a87"
+    },
+    {
+      "path": "logs/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "notebooks/00_Start_Here.ipynb",
+      "bytes": 10596,
+      "sha256": "9042bc6e4ee359a767bc65f88c8c6be72e63631ce99be46bf2d927b46a2a09d3"
+    },
+    {
+      "path": "pyproject.toml",
+      "bytes": 322,
+      "sha256": "3889c75dd38f58916fdd48b387f32b4729b963f22c5741123bdb15df9d9847a7"
+    },
+    {
+      "path": "requirements-notebook.txt",
+      "bytes": 63,
+      "sha256": "3c2c4e9c16c9efdd3a3f1a3da250c374d7749c5185aeaccdc7bb8654d32d5419"
+    },
+    {
+      "path": "requirements-phase1.txt",
+      "bytes": 346,
+      "sha256": "91167cee0a1981968186df53302d0fc7b60b1d1838e0ee3e767682741d6547fd"
+    },
+    {
+      "path": "results/.gitkeep",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "tableguard/__init__.py",
+      "bytes": 107,
+      "sha256": "b0085f326a9e05ead23cbbb2aac95353652ceb56c0b8c290b8cb7f5290e2cf5e"
+    },
+    {
+      "path": "tableguard/__main__.py",
+      "bytes": 3859,
+      "sha256": "18e13752b2afacbfc84184ff4275d6ca99b94fded808c4158fb78a60f20e7ab1"
+    },
+    {
+      "path": "tableguard/adapters.py",
+      "bytes": 773,
+      "sha256": "c5aa32292e94f6945af422436e4b650e911a590299303540223165c0f6e86cb3"
+    },
+    {
+      "path": "tableguard/common.py",
+      "bytes": 714,
+      "sha256": "f6159b0476823f9a4fdb49df6e8e80eb2b663ec4ab13dc9cbb208844cd6a9a20"
+    },
+    {
+      "path": "tableguard/datasets.py",
+      "bytes": 7945,
+      "sha256": "2dd174342c063d906b4f099261388a09440872f4749f31ddb6aa3af167efaba7"
+    },
+    {
+      "path": "tableguard/fixtures.py",
+      "bytes": 1638,
+      "sha256": "4072ff83489d53c12660aeb600b1732e8d5de6beae88436a20516d6407611977"
+    },
+    {
+      "path": "tableguard/hardware.py",
+      "bytes": 5560,
+      "sha256": "d1ef8d0e001701005171a7ae51f6c6b59326ee7015231b60c14e8b6def8dfd8c"
+    },
+    {
+      "path": "tableguard/supervisor.py",
+      "bytes": 5215,
+      "sha256": "321e2ab7cf1e0aa703cabc45b67ed892276d31a711ed89d148b7e63bf639fd8e"
+    },
+    {
+      "path": "tableguard/visualize.py",
+      "bytes": 4525,
+      "sha256": "3b4d00f9969a201976754e7eb765b9f51d34f271ee46e9a65bcbd824f7beea31"
+    },
+    {
+      "path": "tests/test_datasets.py",
+      "bytes": 5283,
+      "sha256": "a94f89f0a8a23da444d93a8ec4ff25e63720735f4fdab06bd28ed803567751cf"
+    },
+    {
+      "path": "tests/test_supervisor.py",
+      "bytes": 6308,
+      "sha256": "8b177394912c7f9b4bf77c020d84dc5d47b2b2c56602292ae61243a07db16018"
+    }
+  ]
+}
