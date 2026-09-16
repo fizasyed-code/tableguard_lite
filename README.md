@@ -304,8 +304,6 @@ Large model checkpoints, caches, raw frame dumps, temporary training runs, and p
 
 - Prepared and refined presentation materials
 - Supported visual organization of project results
-- Assisted with hackathon submission content
-- Managed final submission preparation and media organization
 
 ---
 
